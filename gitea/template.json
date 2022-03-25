@@ -1,0 +1,174 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgName": {
+            "type": "string"
+        },
+        "rgLocation": {
+            "type": "string",
+            "defaultValue": "germanywestcentral"
+        },
+        "imageRegistryLoginServer": {
+            "type": "string",
+            "defaultValue": "tdliwreg.azurecr.io"
+        },
+        "imageUsername": {
+            "type": "string",
+            "defaultValue": "tdliwreg"
+        },
+        "imagePassword": {
+            "type": "securestring"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "[format('storage{0}', uniqueString(resourceGroup().id))]",
+            "metadata": {
+              "description": "Specifies the name of the Azure Storage account."
+            }
+        },
+        "dnsNameLabel": {
+            "type": "string",
+            "defaultValue": "[parameters('rgName')]"
+        },
+        "domainName": {
+            "type": "string",
+            "defaultValue": "[format('{0}.{1}.azurecontainer.io',  parameters('dnsNameLabel'), parameters('rgLocation'))]"
+        },
+        "tags": {
+            "type": "object"
+        }
+    },
+    "variables": {
+        "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+    },
+    "resources": [{
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-04-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('rgLocation')]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": true
+            }
+        },{
+            "type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+            "apiVersion": "2021-04-01",
+            "name": "[format('{0}/default/gitea-share', parameters('storageAccountName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+            ],
+            "tags": "[parameters('tags')]"
+        },{
+            "location": "[parameters('rgLocation')]",
+            "name": "[parameters('rgName')]",
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2021-10-01",
+            "properties": {
+                "imageRegistryCredentials": [
+                    {
+                        "server": "[parameters('imageRegistryLoginServer')]",
+                        "username": "[parameters('imageUsername')]",
+                        "password": "[parameters('imagePassword')]"
+                    }
+                ],
+                "containers": [{
+                    "name": "gitea",
+                    "properties": {
+                        "image": "gitea/gitea",
+                        "resources": {
+                            "requests": {
+                                "cpu": 2,
+                                "memoryInGB": 2
+                            }
+                        },
+                        "ports": [{
+                            "port": 22,
+                            "protocol": "TCP"
+                        }],
+                        "environmentVariables":[{
+                            "name": "USER_UID",
+                            "value": "1000"
+                        },{
+                            "name": "USER_GID",
+                            "value": "1000"
+                        }, {
+                            "name": "GITEA__server__ROOT_URL",
+                            "value": "[format('https://{0}', parameters('domainName'))]"
+                        }, {
+                            "name": "GITEA__server__DOMAIN",
+                            "value": "[parameters('domainName')]"
+                        }, {
+                            "name": "GITEA__server__PROTOCOL",
+                            "value": "https"
+                        }],
+                        "volumeMounts": [{
+                            "mountPath": "/data",
+                            "name": "gitea-share-volume"
+                        }]
+                    }
+                },{
+                    "name": "certbot",
+                    "properties": {
+                        "image": "[format('{0}/maltewildt/golang-certbot-proxy:2022-03-23-15-09-17', parameters('imageRegistryLoginServer'))]",
+                        "resources": {
+                            "requests": {
+                                "cpu": 1.5,
+                                "memoryInGB": 2
+                            }
+                        },
+                        "ports": [{
+                            "port": 80,
+                            "protocol": "TCP"
+                        },{
+                            "port": 443,
+                            "protocol": "TCP"
+                        }],
+                        "volumeMounts": [{
+                            "mountPath": "/opt/mwcertbot/certs",
+                            "name": "certbot-share-volume"
+                        }],
+                        "environmentVariables": [{
+                            "name": "DOMAIN_NAME",
+                            "value": "[parameters('domainName')]"
+                        },{
+                            "name": "SERVICE_URL",
+                            "value": "http://localhost:3000"
+                        }]
+                    }
+                }],
+                "volumes": [{
+                    "name": "gitea-share-volume",
+                    "azureFile": {
+                        "shareName": "gitea-share",
+                        "storageAccountName": "[parameters('storageAccountName')]",
+                        "storageAccountKey": "[listKeys(variables('storageAccountId'), '2019-04-01').keys[0].value]"
+                    }
+                },{
+                    "name": "certbot-share-volume",
+                    "emptyDir": {}
+                }],
+                "restartPolicy": "OnFailure",
+                "osType": "Linux",
+                "ipAddress": {
+                    "type": "Public",
+                    "ports": [{
+                        "port": 80,
+                        "protocol": "TCP"
+                    },{
+                        "port": 22,
+                        "protocol": "TCP"
+                    }, {
+                        "port": 443,
+                        "protocol": "TCP"
+                    }],
+                    "dnsNameLabel": "[parameters('dnsNameLabel')]"
+                }
+            },
+            "tags": "[parameters('tags')]"
+        }
+    ]
+}
