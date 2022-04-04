@@ -299,6 +299,34 @@
                     "emailRecipient": "[parameters('autoShutdownNotificationEmail')]"
                 }
             }
+        },
+        {
+            "name": "microsoft.custom-script-linux",
+            "apiVersion": "2015-01-01",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "https://catalogartifact.azureedge.net/publicartifacts/microsoft.custom-script-linux-arm-2.0.57/MainTemplate.json"
+                },
+                "parameters": {
+                    "fileUris": {
+                        "value": ["https://raw.githubusercontent.com/mwildt/az-ops/main/az-generic-vm/install-docker.sh"]
+                    },
+                    "commandToExecute": {
+                        "value": "sh install-docker.sh"
+                    },
+                    "vmName": {
+                        "value": "[parameters('virtualMachineName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+            ]
         }
     ],
     "outputs": {
@@ -308,3 +336,4 @@
         }
     }
 }
+

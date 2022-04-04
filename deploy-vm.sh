@@ -33,7 +33,7 @@ fi
 
 publicKeyData=$(<${sshdir}/${resource_group_name}_id_rsa.pub)
 
-echo $publicKeyData
+## https://docs.microsoft.com/de-de/azure/virtual-machines/extensions/custom-script-linux
 
 # und dann das deployment starten...
 echo "create deployment $resource_group_name / $dir"
@@ -41,4 +41,4 @@ az deployment group create -g $resource_group_name \
     --template-file $dir/template.json \
     --parameters @$dir/paramerters.json \
     --parameters rgName=$resource_group_name \
-    --parameters publicKeyData=${keyname}.pub
+    --parameters publicKeyData="$publicKeyData"
