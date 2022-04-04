@@ -9,7 +9,7 @@ services:
       - gateway
     environment:
       - SERVICE_MODE=http
-      - ECHO_HOST=tcpkalle:3000
+      - ECHO_HOST=tcpkalle:3300
 
   tcpkalle:
     image: maltewildt/nb-sample:sample-golang-app
