@@ -1,11 +1,13 @@
 #!/bin/bash
+dir="$1-vm"
 
-dir=$1
 resource_group_prefix="mw"
 resource_group_name="$resource_group_prefix-$dir"
 
+# gibt es die ermittelte resourcengruppe bereit?
 az group show --name $resource_group_name > /dev/null
 
+# falls nicht -> rg wird angeleget.
 ressourceGroupRC=$?
 if [ $ressourceGroupRC -ne 0 ]; then
     echo "create resource group with name $resource_group_name"
@@ -16,20 +18,27 @@ if [ $ressourceGroupRC -ne 0 ]; then
         --parameters rgName=$resource_group_name
 fi
 
-echo "reading registry credentials"
-registryCredentials=$(az acr credential show -n tdliwreg --query passwords[0].value)
-# es müssen die ""-Quotes entfernt werden 
+sshdir=./.ssh
+mkdir -p $sshdir
+keyname=${sshdir}/${resource_group_name}_id_rsa
+# generate new ssh key
 
-registryCredentialRC=$?
-if [ $ressourceGroupRC -ne 0 ]; then
-    echo "beim lesen der Registry-Credentials ist ein Fehler aufgetreten"
-    exit $ressourceGroupRC
+if test -f "$keyname"; then
+    echo "key $keyname already exists. None will be created"
+else 
+    ssh-keygen -m PEM -t rsa -b 4096 -f $keyname
 fi
-registryCredentials=${registryCredentials:1:-1}
 
+# laden den public Key
+
+publicKeyData=$(<${sshdir}/${resource_group_name}_id_rsa.pub)
+
+echo $publicKeyData
+
+# und dann das deployment starten...
 echo "create deployment $resource_group_name / $dir"
 az deployment group create -g $resource_group_name \
     --template-file $dir/template.json \
     --parameters @$dir/paramerters.json \
     --parameters rgName=$resource_group_name \
-    --parameters imagePassword=$registryCredentials
+    --parameters publicKeyData=${keyname}.pub

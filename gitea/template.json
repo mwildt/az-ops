@@ -107,7 +107,7 @@
                         }],
                         "volumeMounts": [{
                             "mountPath": "/data",
-                            "name": "gitea-share-volume"
+                            "name": "gitea-share-volume",
                         }]
                     }
                 },{
