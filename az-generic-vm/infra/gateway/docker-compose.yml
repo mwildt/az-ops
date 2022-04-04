@@ -10,7 +10,7 @@ services:
     volumes:
       - "./traefik.yaml:/etc/traefik/traefik.yaml"
       - "./providers:/etc/traefik/providers"
-     - "./acme:/etc/traefik/acme"/
+      - "./acme:/etc/traefik/acme"
     networks:
       - gateway
 
