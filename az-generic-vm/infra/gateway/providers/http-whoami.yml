@@ -1,0 +1,14 @@
+http:
+
+  routers:
+    http-httpkalle:
+      entrypoints:
+      - web      
+      service: service-http-httpkalle
+      rule: Host(`kalle.germanywestcentral.cloudapp.azure.com`)
+
+  services:
+    service-http-httpkalle:
+      loadbalancer:
+        servers:
+        - url: http://httpkalle:80/

@@ -158,6 +158,11 @@
         },
         "autoShutdownNotificationEmail": {
             "value": "malte.wildt@nrwbank.de"
+        },
+        "tags": {
+            "value": {
+                "Ersteller": "Malte"
+            }
         }
     }
 }

@@ -1,0 +1,27 @@
+---
+log:
+  level: DEBUG
+  format: json
+entryPoints:
+  web:
+    address: ":80"
+   # http:
+   #   redirections:
+   #      entryPoint:
+   #        to: "websecure"
+   #        scheme: "https"
+  #websecure:
+  #  address: ":443"
+
+providers:
+  file:
+    directory: /etc/traefik/providers
+    watch: true
+
+#certificatesResolvers:
+#  acmetls:
+#    acme:
+#      email: mail@ohrenpirat.de
+#      storage: /etc/traefik/acme/acme.json
+#      httpChallenge:
+#        entryPoint: web

@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  httpkalle:
+    image: maltewildt/nb-sample:sample-golang-app
+    restart: unless-stopped
+    networks:
+      - samplekalle
+      - gateway
+   environment:
+      - SERVICE_MODE=http
+      - ECHO_HOST=tcpkalle:3000
+
+  tcpkalle:
+    image: maltewildt/nb-sample:sample-golang-app
+    restart: unless-stopped
+    networks:
+      - samplekalle
+    environment:
+      - SERVICE_MODE=tcp
+
+networks:
+  gateway:
+    external: true
+  samplekalle:
+    driver: bridge
+    

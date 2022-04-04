@@ -95,6 +95,9 @@
         },
         "publicKeyData": {
             "type": "string"
+        },
+        "tags": {
+            "type": "object"
         }
     },
     "variables": {
@@ -137,9 +140,7 @@
                     "id": "[variables('nsgId')]"
                 }
             },
-            "tags": {
-                "Ersteller": "Malte"
-            }
+            "tags": "[parameters('tags')]"
         },
         {
             "name": "[parameters('networkSecurityGroupName')]",
@@ -149,9 +150,7 @@
             "properties": {
                 "securityRules": "[parameters('networkSecurityGroupRules')]"
             },
-            "tags": {
-                "Ersteller": "Malte"
-            }
+            "tags": "[parameters('tags')]"
         },
         {
             "name": "[parameters('virtualNetworkName')]",
@@ -164,9 +163,7 @@
                 },
                 "subnets": "[parameters('subnets')]"
             },
-            "tags": {
-                "Ersteller": "Malte"
-            }
+            "tags": "[parameters('tags')]"
         },
         {
             "name": "[parameters('publicIpAddressName')]",
@@ -174,14 +171,15 @@
             "apiVersion": "2019-02-01",
             "location": "[parameters('location')]",
             "properties": {
-                "publicIpAllocationMethod": "[parameters('publicIpAddressType')]"
+                "publicIpAllocationMethod": "[parameters('publicIpAddressType')]",
+                "dnsSettings": {
+                    "domainNameLabel": "kalle"
+                }
             },
             "sku": {
                 "name": "[parameters('publicIpAddressSku')]"
             },
-            "tags": {
-                "Ersteller": "Malte"
-            }
+            "tags": "[parameters('tags')]"
         },
         {
             "name": "[parameters('dataDiskResources')[copyIndex()].name]",
@@ -272,9 +270,7 @@
                     }
                 }
             },
-            "tags": {
-                "Ersteller": "Malte"
-            }
+            "tags": "[parameters('tags')]"
         },
         {
             "name": "[concat('shutdown-computevm-', parameters('virtualMachineName'))]",
