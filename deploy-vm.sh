@@ -1,7 +1,7 @@
 #!/bin/bash
 dir="$1-vm"
 
-resource_group_prefix="mw"
+resource_group_prefix=$2
 resource_group_name="$resource_group_prefix-$dir"
 
 # gibt es die ermittelte resourcengruppe bereit?

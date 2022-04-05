@@ -1,0 +1,16 @@
+http:
+
+  routers:
+    http-httpkalle:
+      entrypoints:
+      - websecure      
+      service: service-http-httpkalle
+      rule: Host(`kalle.germanywestcentral.cloudapp.azure.com`)
+      tls:
+        certresolver: acmetls
+
+  services:
+    service-http-httpkalle:
+      loadbalancer:
+        servers:
+        - url: http://httpkalle:80/
