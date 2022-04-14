@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /mount-disk.sh 0 /data
+sudo . ./mount-disk.sh 0 /data
 
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl
