@@ -12,5 +12,5 @@ sudo apt-get install -y kubelet kubeadm kubectl
 
 sudo apt-mark hold kubelet kubeadm kubectl
 
-sudo apt-get install -y containerd.io 
+sudo apt-get install -y containerd
 
