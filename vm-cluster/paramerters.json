@@ -2,17 +2,20 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "cluster-name"
+            
+        },
         "location": {
             "value": "germanywestcentral"
         },
         "networkInterfaceName": {
-            "value": "labco-864"
+            "value": "kallevm-864"
         },
         "enableAcceleratedNetworking": {
             "value": true
         },
         "networkSecurityGroupName": {
-            "value": "labco-nsg"
+            "value": "kallevm-nsg"
         },
         "networkSecurityGroupRules": {
             "value": [
@@ -61,7 +64,7 @@
             "value": "default"
         },
         "virtualNetworkName": {
-            "value": "labco_group-vnet"
+            "value": "kallevm_group-vnet"
         },
         "addressPrefixes": {
             "value": [
@@ -79,7 +82,7 @@
             ]
         },
         "publicIpAddressName": {
-            "value": "labco-ip"
+            "value": "kallevm-ip"
         },
         "publicIpAddressType": {
             "value": "Dynamic"
@@ -91,10 +94,10 @@
             "value": "Detach"
         },
         "virtualMachineName": {
-            "value": "labco"
+            "value": "kallevm"
         },
         "virtualMachineComputerName": {
-            "value": "labco"
+            "value": "kallevm"
         },
         "osDiskType": {
             "value": "StandardSSD_LRS"
@@ -111,7 +114,7 @@
                     "caching": "ReadOnly",
                     "writeAcceleratorEnabled": false,
                     "id": null,
-                    "name": "labco_DataDisk_0",
+                    "name": "asdasdfsdf_DataDisk_0",
                     "storageAccountType": null,
                     "diskSizeGB": null,
                     "diskEncryptionSet": null
@@ -121,7 +124,7 @@
         "dataDiskResources": {
             "value": [
                 {
-                    "name": "labco_DataDisk_0",
+                    "name": "asdasdfsdf_DataDisk_0",
                     "sku": "Premium_LRS",
                     "properties": {
                         "diskSizeGB": 256,
@@ -133,13 +136,13 @@
             ]
         },
         "virtualMachineSize": {
-            "value": "Standard_D4s_v3"
+            "value": "Standard_D2s_v3"
         },
         "nicDeleteOption": {
             "value": "Detach"
         },
         "adminUsername": {
-            "value": "labcouser"
+            "value": "bosskalle"
         },
         "autoShutdownStatus": {
             "value": "Enabled"

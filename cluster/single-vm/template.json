@@ -2,6 +2,9 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "clusterName": {
+            "type": "string"
+        },
         "rgName": {
             "type": "string"
         },
@@ -9,71 +12,165 @@
             "type": "string"
         },
         "networkInterfaceName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[concat(parameters('clusterName'), '-nif0')]"
         },
         "enableAcceleratedNetworking": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": true 
         },
         "networkSecurityGroupName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[concat(parameters('clusterName'), '-nsg0')]"
         },
         "networkSecurityGroupRules": {
-            "type": "array"
+            "type": "array",
+            "defaultValue": [
+                {
+                    "name": "SSH",
+                    "properties": {
+                        "priority": 300,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "22"
+                    }
+                },
+                {
+                    "name": "HTTPS",
+                    "properties": {
+                        "priority": 320,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "443"
+                    }
+                },
+                {
+                    "name": "HTTP",
+                    "properties": {
+                        "priority": 340,
+                        "protocol": "TCP",
+                        "access": "Allow",
+                        "direction": "Inbound",
+                        "sourceAddressPrefix": "*",
+                        "sourcePortRange": "*",
+                        "destinationAddressPrefix": "*",
+                        "destinationPortRange": "80"
+                    }
+                }
+            ]
         },
         "subnetName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "default"
         },
         "virtualNetworkName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[concat(parameters('clusterName'), '-vnet0')]"
         },
         "addressPrefixes": {
-            "type": "array"
+            "type": "array",
+            "defaultValue": [
+                "10.4.0.0/16"
+            ]
         },
         "subnets": {
-            "type": "array"
+            "type": "array",
+            "defaultValue": [
+                {
+                    "name": "default",
+                    "properties": {
+                        "addressPrefix": "10.4.0.0/24"
+                    }
+                }
+            ]
         },
         "publicIpAddressName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[concat(parameters('clusterName'), '-pubip')]"
         },
         "publicIpAddressType": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "Static"
         },
         "publicIpAddressSku": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "Basic"
         },
         "pipDeleteOption": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "Detach"
         },
         "virtualMachineName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[concat(parameters('clusterName'), '-vm0')]"
         },
         "virtualMachineComputerName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[concat(parameters('clusterName'), '-vm0')]"
         },
         "virtualMachineRG": {
             "type": "string",
             "defaultValue": "[parameters('rgName')]"
         },
         "osDiskType": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "StandardSSD_LRS"
         },
         "osDiskDeleteOption": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "Delete"
         },
         "dataDisks": {
-            "type": "array"
+            "type": "array",
+            "defaultValue": [
+                {
+                    "lun": 0,
+                    "createOption": "attach",
+                    "deleteOption": "Detach",
+                    "caching": "ReadOnly",
+                    "writeAcceleratorEnabled": false,
+                    "id": null,
+                    "name": "[concat(parameters('clusterName'), '_datadisk_0')]",
+                    "storageAccountType": null,
+                    "diskSizeGB": null,
+                    "diskEncryptionSet": null
+                }
+            ]
         },
         "dataDiskResources": {
-            "type": "array"
+            "type": "array",
+            "defaultValue": [
+                {
+                    "name": "[concat(parameters('clusterName'), '_datadisk_0')]",
+                    "sku": "Premium_LRS",
+                    "properties": {
+                        "diskSizeGB": 256,
+                        "creationData": {
+                            "createOption": "empty"
+                        }
+                    }
+                }
+            ]
         },
         "virtualMachineSize": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "Standard_D4s_v3"
         },
         "nicDeleteOption": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "Detach"
         },
         "adminUsername": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "[concat(parameters('clusterName'), 'user')]"
         },
         "autoShutdownStatus": {
             "type": "string"
@@ -171,10 +268,7 @@
             "apiVersion": "2019-02-01",
             "location": "[parameters('location')]",
             "properties": {
-                "publicIpAllocationMethod": "[parameters('publicIpAddressType')]",
-                "dnsSettings": {
-                    "domainNameLabel": "labco"
-                }
+                "publicIpAllocationMethod": "[parameters('publicIpAddressType')]"
             },
             "sku": {
                 "name": "[parameters('publicIpAddressSku')]"
@@ -258,7 +352,7 @@
                         "ssh": {
                             "publicKeys": [{
                                 "keyData": "[parameters('publicKeyData')]",
-                                "path": "/home/labcouser/.ssh/authorized_keys"
+                                "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]"
                             }]
                         }
 

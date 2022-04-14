@@ -1,7 +1,7 @@
 #!/bin/bash
 
 dir=$1
-resource_group_prefix="mw"
+resource_group_prefix=$2
 resource_group_name="$resource_group_prefix-$dir"
 
 az group show --name $resource_group_name > /dev/null
