@@ -401,7 +401,10 @@
                 },
                 "parameters": {
                     "fileUris": {
-                        "value": ["https://raw.githubusercontent.com/mwildt/az-ops/main/cluster/install-kubernetes.sh"]
+                        "value": [
+                            "https://raw.githubusercontent.com/mwildt/az-ops/main/cluster/mount-disk.sh",
+                            "https://raw.githubusercontent.com/mwildt/az-ops/main/cluster/install-kubernetes.sh"
+                        ]
                     },
                     "commandToExecute": {
                         "value": "sh install-kubernetes.sh"

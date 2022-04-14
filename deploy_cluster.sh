@@ -40,7 +40,6 @@ else
 fi
 
 
-
 RESOURCE_GROUP_NAME=$CLUSTER_NAME-$CLUSTER_TYPE
 echo "Resource Group: $RESOURCE_GROUP_NAME"
 
@@ -85,11 +84,12 @@ output=$(az deployment group create -g $RESOURCE_GROUP_NAME \
     --parameters clusterName="$CLUSTER_NAME" \
     --parameters publicKeyData="$PUBLIC_KEY_DATA")
 
-echo $output > "./deploy.$CLUSTER_NAME.log"
+mkdir ./logs
+echo $output > ".logs/deploy.$CLUSTER_NAME.json"
 
 if [ $? -ne 0 ]; then
-    echo "deployed suceeded"
-else
     echo "deployed faild"
     exit $?s
+else
+    echo "deployed suceeded"
 fi 

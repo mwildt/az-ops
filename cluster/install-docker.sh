@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ./mount-disk.sh 0 /data
+
 # das folgende Skript installiert Docker auf einer Ubuntu VM
 # 
 # https://docs.docker.com/engine/install/ubuntu/
