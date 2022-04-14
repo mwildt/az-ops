@@ -390,6 +390,9 @@
                 }
             }
         },
+
+        
+        
         {
             "name": "microsoft.custom-script-linux",
             "apiVersion": "2015-01-01",
@@ -402,12 +405,41 @@
                 "parameters": {
                     "fileUris": {
                         "value": [
-                            "https://raw.githubusercontent.com/mwildt/az-ops/main/cluster/mount-disk.sh",
                             "https://raw.githubusercontent.com/mwildt/az-ops/main/cluster/install-kubernetes.sh"
                         ]
                     },
                     "commandToExecute": {
                         "value": "sh install-kubernetes.sh"
+                    },
+                    "vmName": {
+                        "value": "[parameters('virtualMachineName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+            ]
+        },
+        {
+            "name": "microsoft.custom-script-linux",
+            "apiVersion": "2015-01-01",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "https://catalogartifact.azureedge.net/publicartifacts/microsoft.custom-script-linux-arm-2.0.57/MainTemplate.json"
+                },
+                "parameters": {
+                    "fileUris": {
+                        "value": [
+                            "https://raw.githubusercontent.com/mwildt/az-ops/main/cluster/mount-disk.sh"
+                        ]
+                    },
+                    "commandToExecute": {
+                        "value": "sh mount-disk.sh 0 /data"
                     },
                     "vmName": {
                         "value": "[parameters('virtualMachineName')]"
