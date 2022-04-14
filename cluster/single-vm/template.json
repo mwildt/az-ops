@@ -389,12 +389,8 @@
                     "emailRecipient": "[parameters('autoShutdownNotificationEmail')]"
                 }
             }
-        },
-
-        
-        
-        {
-            "name": "microsoft.custom-script-linux",
+        },{
+            "name": "microsoft.custom-script-linux-k8s",
             "apiVersion": "2015-01-01",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -424,7 +420,7 @@
             ]
         },
         {
-            "name": "microsoft.custom-script-linux",
+            "name": "microsoft.custom-script-linux-disk",
             "apiVersion": "2015-01-01",
             "type": "Microsoft.Resources/deployments",
             "properties": {
