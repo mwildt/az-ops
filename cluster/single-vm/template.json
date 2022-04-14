@@ -401,10 +401,10 @@
                 },
                 "parameters": {
                     "fileUris": {
-                        "value": ["https://raw.githubusercontent.com/mwildt/az-ops/main/az-generic-vm/install-docker.sh"]
+                        "value": ["https://raw.githubusercontent.com/mwildt/az-ops/main/cluster/install-kubernetes.sh"]
                     },
                     "commandToExecute": {
-                        "value": "sh install-docker.sh"
+                        "value": "sh install-kubernetes.sh"
                     },
                     "vmName": {
                         "value": "[parameters('virtualMachineName')]"
