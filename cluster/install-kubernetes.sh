@@ -1,6 +1,4 @@
 #!/bin/bash
-
-
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl
 
@@ -9,20 +7,28 @@ sudo apt-get install -y apt-transport-https ca-certificates curl
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install containerd.io
 
-# install kubernetes tooling
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg
 
-# xenial ist das letzte passende release?
+# Configure containerd and start service // https://computingforgeeks.com/deploy-kubernetes-cluster-on-ubuntu-with-kubeadm/
+sudo su -
+mkdir -p /etc/containerd
+containerd config default>/etc/containerd/config.toml
+
+# restart containerd
+sudo systemctl restart containerd
+sudo systemctl enable containerd
+systemctl status  containerd
+
+# install kubernetes tooling
+sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
-
 
 # den hostnamen konfigurieren
 sudo hostnamectl set-hostname kubemaster
@@ -48,3 +54,7 @@ EOF
 
 # Reload sysctl
 sudo sysctl --system
+
+mkdir -p ./logs
+sudo kubemaster init > kubermater.logs
+

@@ -25,6 +25,8 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+mkdir  -p ./logs
+
 if [ -v CLUSTER_NAME ]; then 
    echo "Cluster Name: $CLUSTER_NAME"
 else
@@ -84,12 +86,16 @@ output=$(az deployment group create -g $RESOURCE_GROUP_NAME \
     --parameters clusterName="$CLUSTER_NAME" \
     --parameters publicKeyData="$PUBLIC_KEY_DATA")
 
-if [ $? -ne 0 ]; then
+$rcode=$?
+
+echo $output > ".logs/deploy.$CLUSTER_NAME.json"
+
+if [ $rcode -ne 0 ]; then
     echo "deployed faild"
-    exit $?s
+    exit $?
 else
     echo "deployed suceeded"
 fi 
 
-mkdir ./logs
-echo $output > ".logs/deploy.$CLUSTER_NAME.json"
+
+
