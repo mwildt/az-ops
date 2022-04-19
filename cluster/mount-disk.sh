@@ -1,5 +1,4 @@
 #!/bin/bash
-
 lun=$1
 mountPoint=$2
 echo "lun=$lun mountPoint=$mountPoint"

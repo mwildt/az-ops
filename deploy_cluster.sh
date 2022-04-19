@@ -84,12 +84,12 @@ output=$(az deployment group create -g $RESOURCE_GROUP_NAME \
     --parameters clusterName="$CLUSTER_NAME" \
     --parameters publicKeyData="$PUBLIC_KEY_DATA")
 
-mkdir ./logs
-echo $output > ".logs/deploy.$CLUSTER_NAME.json"
-
 if [ $? -ne 0 ]; then
     echo "deployed faild"
     exit $?s
 else
     echo "deployed suceeded"
 fi 
+
+mkdir ./logs
+echo $output > ".logs/deploy.$CLUSTER_NAME.json"
