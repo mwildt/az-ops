@@ -62,8 +62,6 @@ EOF
 echo "[RUN] sudo sysctl --system" 
 sudo sysctl --system
 
-echo "working in $(pwd)"
-mkdir -p ./logs
-echo "[RUN] sudo kubeadm init, see ./logs/kubeadm.logs" 
-sudo kubeadm init > ./logs/kubeadm.logs
+echo "[RUN] sudo kubeadm init, see ./var/logs/logs/kubeadm-init.logs" 
+sudo kubeadm init | sudo tee -a /var/logs/kubeadm-init.logs
 
