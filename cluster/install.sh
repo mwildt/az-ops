@@ -56,6 +56,9 @@ do
     end=${endargs[$script]}
     scriptArgs=("${ARGS[*]:$start:$end}")
     
-    echo "run scrip file  $scriptfile with args ${scriptArgs[*]}"
-    $scriptfile "${scriptArgs[*]}"
+    echo "run script file  $scriptfile with args ${scriptArgs[*]}, find logs @ $LOG_BASE/install/$script"
+    echo "---------------------------------------------------------------------" >> $LOG_BASE/install/$script
+    echo "|$(date) | RUN SCRIPT | $scriptfile ${scriptArgs[*]}" >> $LOG_BASE/install/$script
+    echo "---------------------------------------------------------------------" >> $LOG_BASE/install/$script
+    sudo $scriptfile "${scriptArgs[*]}" | sudo tee -a $LOG_BASE/install/$script
 done
