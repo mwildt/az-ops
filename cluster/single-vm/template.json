@@ -405,7 +405,7 @@
                         ]
                     },
                     "commandToExecute": {
-                        "value": "sh install.sh -- mount-disk.sh 0 /data -- install-kubernetes.sh"
+                        "value": "sh install.sh -- mount-disk.sh 0 /data -- k8s-master.sh"
                     },
                     "vmName": {
                         "value": "[parameters('virtualMachineName')]"
