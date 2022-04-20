@@ -1,2 +1,6 @@
 #!/bin/bash
-echo $(date)
+
+#!/bin/bash 
+echo "run info.sh"
+echo $@
+echo $(date) 
