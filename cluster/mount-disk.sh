@@ -2,14 +2,14 @@
 lun=$1
 mountPoint=$2
 echo "lun=$lun mountPoint=$mountPoint"
-logicalDevice=$(lsscsi | awk '$1 == param { print $7 }' param="[1:0:0:$lun]")
-echo "logicalDevice=$logicalDevice"
+scsi=$(lsscsi | awk '$1 == param { print $7 }' param="[1:0:0:$lun]")
+echo "logicalDevice=$scsi"
 
 #parted /dev/sdc --script mklabel gpt mkpart xfspart xfs 0% 100%
-echo "run sudo parted $logicalDevice --script mklabel gpt mkpart xfspart xfs 0% 100%"
-sudo parted $logicalDevice --script mklabel gpt mkpart xfspart xfs 0% 100%
+echo "run sudo parted $scsi --script mklabel gpt mkpart xfspart xfs 0% 100%"
+sudo parted $scsi --script mklabel gpt mkpart xfspart xfs 0% 100%
 
-partition="${logicalDevice}1"
+partition="${scsi}1"
 
 echo "partition=$partition"
 # UNd dann eine Partition mit dem X-File-System erstellen
