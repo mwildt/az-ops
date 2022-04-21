@@ -61,5 +61,5 @@ do
     echo "---------------------------------------------------------------------" >> $LOG_BASE/install/$script
     echo "|$(date) | RUN SCRIPT | $scriptfile ${scriptArgs[*]}" >> $LOG_BASE/install/$script
     echo "---------------------------------------------------------------------" >> $LOG_BASE/install/$script
-    sudo $scriptfile "${scriptArgs[*]}" | sudo tee -a $LOG_BASE/install/$script
+    sudo $scriptfile "${scriptArgs[@]}" | sudo tee -a $LOG_BASE/install/$script
 done
