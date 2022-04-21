@@ -55,7 +55,8 @@ do
     sudo chmod +x $scriptfile
     start=${startargs[$script]}
     end=${endargs[$script]}
-    scriptArgs=("${ARGS[*]:$start:$end}")
+    
+    read -ra scriptArgs <<< ${ARGS[*]:$start:$end}
     
     echo "run script file  $scriptfile with args ${scriptArgs[@]}, find logs @ $LOG_BASE/install/$script"
     echo "---------------------------------------------------------------------" >> $LOG_BASE/install/$script
