@@ -2,5 +2,10 @@
 
 #!/bin/bash 
 echo "run info.sh"
-echo $@
+echo "##### args"
+for var in "$@"
+do
+    echo "arg: $var"
+done
+echo "##### meta"
 echo $(date) 
