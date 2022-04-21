@@ -1,3 +1,4 @@
+#!/bin/bash
 BASE_SCRIPT_SOURCE="https://raw.githubusercontent.com/mwildt/az-ops/main/cluster"
 
 CURRENT="."
