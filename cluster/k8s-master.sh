@@ -25,6 +25,12 @@ sudo systemctl restart containerd
 sudo systemctl enable containerd
 systemctl status containerd
 
+# wait for containerd to be startetd
+until pids=$(pidof containerd)
+do   
+    sleep 1
+done
+
 # install kubernetes tooling
 echo "[INFO] prepare kubernetes" 
 sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -41,7 +47,6 @@ sudo hostnamectl set-hostname kubemaster
 ## und den namen auch in die ip-tabelle eintragen
 IP_ADR=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 echo "$IP_ADR kubemaster" | sudo tee -a /etc/hosts > /dev/null
-
 
 ## disable swap
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
@@ -62,6 +67,8 @@ EOF
 echo "[RUN] sudo sysctl --system" 
 sudo sysctl --system
 
-echo "[RUN] sudo kubeadm init, see ./var/logs/logs/kubeadm-init.logs" 
-sudo kubeadm init | sudo tee -a /var/logs/kubeadm-init.logs
+#echo "[RUN] sudo kubeadm init, see ./var/logs/logs/kubeadm-init.logs" 
+#sudo kubeadm init --apiserver-cert-extra-sans 20.113.178.234 | sudo tee -a /var/logs/kubeadm-init.logs
+
+
 
