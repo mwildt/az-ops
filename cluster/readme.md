@@ -34,7 +34,7 @@ Damit Kubectl auch von einer entferten Maschine ausgeführt werden kann, muss di
 ## Weitere Einrichtung des Kubernetes System
 
 ### DNS
-Ein aufruf von `kubectl get pods --all-namespaces` zeigt, dass schon einige Pods auf dem System laufen, einige aber eauch im status Pending sind. Hierbei handelt es sich um die Core-DNS-Pods, welche für den Betrieb des Cluster hofreich sind.
+Ein Aufruf von `kubectl get pods --all-namespaces` zeigt, dass schon einige Pods auf dem System laufen, einige aber eauch im status Pending sind. Hierbei handelt es sich um die Core-DNS-Pods, welche für den Betrieb des Cluster hofreich sind.
 
 https://projectcalico.docs.tigera.io/getting-started/kubernetes/quickstart
 
@@ -47,7 +47,7 @@ kubectl create -f https://projectcalico.docs.tigera.io/manifests/custom-resource
  Der Aufruf von `kubectl get pods --all-namespaces` zeigt nun, dass viele der vorhandenen Pods vom Status `Pending` in den Status `Running` wechseln.
 
 ### Ausführen von PODs auf dem Master-Node
-KUbernetes sieht eigentlich nicht vor, dass auch auf derm Master-Node Pods deployt werden (dieser ist für die Steuerung vorbehalten). Diese Einschränkung kann aber für unser Single-Node-Szenario expliziet deaktiviert werden. Dazu muss folgdenes ausgeführt werden.
+Kubernetes sieht eigentlich nicht vor, dass auch auf derm Master-Node Pods deployt werden (dieser ist für die Steuerung vorbehalten). Diese Einschränkung kann aber für unser Single-Node-Szenario expliziet deaktiviert werden. Dazu muss folgdenes ausgeführt werden.
 
 ```
 kubectl taint nodes --all node-role.kubernetes.io/master-
