@@ -27,7 +27,7 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
-`kubectl` ist damit auf der vm einsatzbereit. Das ausführen von `kubectl get pods --all-namespaces` sollte eine Liste aller auf definierten Pods liefern.
+`kubectl` ist damit auf der vVM einsatzbereit. Das Ausführen von `kubectl get pods --all-namespaces` sollte eine Liste aller im Cluster definierten Pods liefern.
 
 Damit Kubectl auch von einer entferten Maschine ausgeführt werden kann, muss die Konfiguration entsprechend übertragen werden. Wichtig: Es muss die IP in der Datei `~/.kube/config`auf die öffentliche IP der Azure-VM angepasst werden.
 
