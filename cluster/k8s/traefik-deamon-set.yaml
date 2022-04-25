@@ -101,6 +101,7 @@ spec:
         - --certificatesresolvers.letsenc.acme.email=mail@ohrenpirat.de
         - --certificatesresolvers.letsenc.acme.storage=acme.json
         - --certificatesresolvers.letsenc.acme.httpchallenge.entrypoint=web
+        - --serversTransport.insecureSkipVerify=true
 ---
 kind: Service
 apiVersion: v1
