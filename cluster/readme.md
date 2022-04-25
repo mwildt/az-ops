@@ -1,7 +1,7 @@
 # Kubernetes Setup
 
 Die Virtuelle Maschine kann für Kubernetes vorbereitet werden. Dazu müssen einige Pakete installiert und ein paar Anpassungen
-an der VM vorgenommen werden. Zunächst wir das [Install-Skript](.az-ops/cluster/k8s-master.sh) geladen.
+an der VM vorgenommen werden. Zunächst wir das [Install-Skript](./k8s-master.sh) geladen.
 
 ```
 curl https://raw.githubusercontent.com/mwildt/az-ops/main/cluster/install.sh -o install.sh
